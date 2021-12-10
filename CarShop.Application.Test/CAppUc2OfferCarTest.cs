@@ -57,6 +57,18 @@ namespace CarShop.Application.Test {
       }
       #endregion
 
+       private User CreateUser() {
+         var name     = "Martin Michel";
+         var email    = "m.michel@gmx.de";
+         var userName = "MartinM";
+         var password = "geh1m_Geh1m";
+         var result   = _appUc1User.CreateUser(name, email, userName, password, Role.Customer);
+         
+         Assert.IsInstanceOfType(result, typeof(Success<User>));
+         if(result is Success<User>) return result.Data;
+         Assert.Fail();
+         return null;
+      }
 
       private (Car, User) RegiserUserWith3OfferedCars() {
          User user   = CreateUser();

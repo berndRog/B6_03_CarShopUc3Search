@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace CarShop.Domain.Entities {
 
-   public record Car:  IEntity {
+   public class Car:  IEntity {
 
       #region properties
       public int    Id    { get; set; } = 0; 
@@ -33,16 +33,23 @@ namespace CarShop.Domain.Entities {
          User = user;
          return this;
       } 
-
       
       public string AsString() => $"{Id,3} {Make,-15} {Model,-12} "     +
                                   $"{Price,8:f2} EUR ";
 
-      public bool IsEqual(Car car) 
-         => Id    == car.Id    &&
-            Make  == car.Make  &&
-            Model == car.Model &&
-            Math.Abs(Price - car.Price) < 0.0001; 
+      
+      public bool IsEqual(Car? car) {
+        if( car == null) return false;
+           var result =  Id    == car.Id    &&
+                         Make  == car.Make  &&
+                         Model == car.Model &&
+                         Math.Abs(Price - car.Price) < 0.0001;
+
+         if(User?.Id != car.UserId) result &= false;
+         return result;
+      }
+
+      public override int GetHashCode() => this.GetHashCode();
 
       public bool FitsTo(CarTs carTs) 
          => Make  == carTs.Make      &&

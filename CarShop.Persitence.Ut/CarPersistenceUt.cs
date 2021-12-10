@@ -50,7 +50,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryCar.FindById(car.Id);
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(car.IsEqual(actual));
+         Assert.IsTrue(actual.IsEqual(car));
       }
       [TestMethod]
       public void FindUt() {
@@ -61,7 +61,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryCar.Find(c => c.Model =="A4");
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(car.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(car));
       }
       [TestMethod]
       public void SelectUt() {

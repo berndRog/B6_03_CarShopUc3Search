@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CarShop.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using CarShop.Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
 
@@ -27,24 +28,33 @@ namespace CarShop.Persistence {
       #region methods IRepositoryCar
       // Select * From Cars Where Id = p1
       public Car? FindById(int id)
-         => _dbContext.Cars.Find(id);
+         => _dbContext.Cars
+                      .Include(c => c.User)
+                      .FirstOrDefault(c => c.Id == id);
 
       // Select * From Cars Where predicate
       public Car? Find(Func<Car,bool> predicate) 
          => _dbContext.Cars
+                      .Include(c => c.User)
                       .SingleOrDefault(predicate);
 
       public IEnumerable<Car> Select(Func<Car, bool> predicate)
          => _dbContext.Cars
+                      .Include(c => c.User)
                       .Where(predicate).ToList();
 
       public IEnumerable<Car> SelectAll() 
          => _dbContext.Cars
+                      .Include(car => car.User)
                       .ToList();
 
       public void Attach(Car car) 
          => _dbContext.Cars
                       .Attach(car);
+
+      public void Delete(Car car) 
+         => _dbContext.Cars.Remove(car);
+     
       #endregion
 
       #region methods Count 

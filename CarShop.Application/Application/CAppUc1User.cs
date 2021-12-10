@@ -83,24 +83,17 @@ namespace CarShop.Application {
       #endregion
 
       #region AddorUpdateAddress
-      public Result<User> AddOrUpdateAddress(string streetNr, string zipCity, User u) {
-         var foundUser = _unitOfWork.RepositoryUser.FindById(u.Id);
-         if(foundUser == null) return new Error<User>($"AddOrUpdateAddress User {u.Id} gibt es nicht.");
-         User user = foundUser;
-
+      public Result<User> AddOrUpdateAddress(string streetNr, string zipCity, User user) {
+        
          _log.LogInformation($"{nameof(AddOrUpdateAddress)} {user.UserName}");
 
-         // Add Address
+         // Add or Update Address
          if(user.Address == null) user.AddAddress(streetNr, zipCity);
-
-         // Update Address
-         else
-            user.UpdateAddress(streetNr, zipCity);  
+         else                     user.UpdateAddress(streetNr, zipCity);  
 
          // update user in repository --> add new Address
          _unitOfWork.RepositoryUser
                     .Update(user); 
-         // Transfer to database
          var result = _unitOfWork.SaveChanges();
          _unitOfWork.Dispose();
          

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using CarShop.Domain;
 using CarShop.Domain.Entities;
 using CarShop.Domain.Enums;
@@ -12,7 +13,8 @@ namespace CarShop.Application.Test {
    public class CAppUc2OfferCarTest {
 
       #region Init
-      private CSeed           _seed;
+      private CSeed           _seed  = new();
+      private IAppCore        _appCore;
       private IAppUc1User     _appUc1User;
       private IAppUc2OfferCar _appUc2OfferCar;
       private IUnitOfWork     _unitOfWork;
@@ -28,6 +30,7 @@ namespace CarShop.Application.Test {
 
 
          var serviceCollection = new ServiceCollection();
+         serviceCollection.AddSingleton<IAppCore,        CAppCore>();
          serviceCollection.AddSingleton<IAppUc1User,     CAppUc1User>();
          serviceCollection.AddSingleton<IAppUc2OfferCar, CAppUc2OfferCar>();
          serviceCollection.AddSingleton<IUnitOfWork,     CUnitOfWork>();
@@ -37,6 +40,7 @@ namespace CarShop.Application.Test {
          serviceCollection.AddLogging();
          var services = serviceCollection.BuildServiceProvider();
 
+         _appCore        = services.GetService<IAppCore>();
          _appUc1User     = services.GetService<IAppUc1User>();
          _appUc2OfferCar = services.GetService<IAppUc2OfferCar>();
          _unitOfWork     = services.GetService<IUnitOfWork>();
@@ -45,8 +49,6 @@ namespace CarShop.Application.Test {
          _dbContext.Database.EnsureDeleted();
          _dbContext.Database.EnsureCreated();
          _dbContext.Dispose();
-         
-         _seed = new CSeed();
       }
 
       [TestCleanup]
@@ -55,31 +57,24 @@ namespace CarShop.Application.Test {
       }
       #endregion
 
-      [TestMethod]
-      public void OfferCarTest() {
-         // Arrange
-         User user   = CreateUser();
-         var  result = _appUc1User.RegisterUser(user);
-         Car  car    = _seed.Car01;
-         // Act 
-         _appUc2OfferCar.AddOfferedCar(user, car);
-         // Assert
-         var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
-         //Assert.
 
-      }
-      
-      private User CreateUser() {
-         var name     = "Martin Michel";
-         var email    = "m.michel@gmx.de";
-         var userName = "MartinM";
-         var password = "geh1m_Geh1m";
-         var result   = _appUc1User.CreateUser(name, email, userName, password, Role.Customer);
-         
-         Assert.IsInstanceOfType(result, typeof(Success<User>));
-         if(result is Success<User>) return result.Data;
-         Assert.Fail();
-         return null;
+      private (Car, User) RegiserUserWith3OfferedCars() {
+         User user   = CreateUser();
+         _unitOfWork.RepositoryUser
+                    .Insert(user);
+         var result = _unitOfWork.SaveChanges();
+         _unitOfWork.Dispose();
+         _seed.Car01.Id = 0;
+         _seed.Car02.Id = 0;
+         _seed.Car03.Id = 0;
+         user.AddOfferedCar(_seed.Car01);
+         user.AddOfferedCar(_seed.Car02);
+         user.AddOfferedCar(_seed.Car03);
+         _unitOfWork.RepositoryUser
+                    .Update(user);
+         _unitOfWork.SaveChanges();
+         _unitOfWork.Dispose();
+         return (_seed.Car02, user);
       }
    }
 }

@@ -88,8 +88,7 @@ namespace CarShop.Application.Test {
          Assert.IsTrue(result is Success<User>);
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
          _unitOfWork.Dispose();
-         Assert.IsNotNull(actual);
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }     
       #endregion
 
@@ -106,8 +105,7 @@ namespace CarShop.Application.Test {
          Assert.IsTrue(result is Success<User>);
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
          _unitOfWork.Dispose();
-         Assert.IsNotNull(actual);
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
 
       public void RemoveUserTest() {
@@ -133,9 +131,7 @@ namespace CarShop.Application.Test {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
          _unitOfWork.Dispose();
-
-         
-         
+         Assert.IsTrue(actual?.IsEqual(user));         
       }
       #endregion
       

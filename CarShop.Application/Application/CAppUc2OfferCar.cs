@@ -6,15 +6,18 @@ namespace CarShop.Application {
    public class CAppUc2OfferCar: IAppUc2OfferCar {
       
       #region fields
-      private readonly IUnitOfWork       _unitOfWork;
+      private readonly IAppCore                 _appCore;
+      private readonly IUnitOfWork              _unitOfWork;
       private readonly ILogger<CAppUc2OfferCar> _log;
       #endregion
 
       #region ctor
       public CAppUc2OfferCar(
+         IAppCore              appCore, 
          IServiceScopeFactory  serviceScopeFactory,
          ILoggerFactory        loggerFactory
       ) {
+         _appCore    = appCore;
          _unitOfWork = serviceScopeFactory.CreateScope()
                                           .ServiceProvider.GetRequiredService<IUnitOfWork>();
          _log = loggerFactory.CreateLogger<CAppUc2OfferCar>();
@@ -32,49 +35,20 @@ namespace CarShop.Application {
       }
       public Result<Car> AddOfferedCar(User user, Car car) {
          _log.LogInformation($"{nameof(AddOfferedCar)} {user.UserName} {car.Make}");
-     
-         // Update user (with car)
-         car.Id = 0;
-         user.AddOfferedCar(car);
-         _unitOfWork.RepositoryUser
-                    .Update(user);
-         // Transfer to database
-         var result = _unitOfWork.SaveChanges();
-         _unitOfWork.Dispose();
-         if(result) return new Success<Car>(car);
-         else       return new Error<Car>($"Fehler in AddOfferedCar()");
+
+         return new Error<Car>($"Fehler in AddOfferedCar()");
       }
 
-      public Result<Car> UpdateOfferedCar(User user, Car car) {
+      public Result<Car> UpdateOfferedCar(User user, Car car, double price) {
          _log.LogDebug($"{nameof(UpdateOfferedCar)} {user.UserName} {car.Make}");
          
-         // Update car in users offeredCars
-         user.UpdateOfferedCar(car, 1234);   
-         
-         // Update user and car 
-         _unitOfWork.RepositoryUser
-                    .Update(user);  
-         
-         // Transfer to database
-         var result = _unitOfWork.SaveChanges();
-         _unitOfWork.Dispose();
-
-         if(result) return new Success<Car>(car); 
-         else       return new Error<Car>($"Fehler in UpdateOfferedCar()");
+         return new Error<Car>($"Fehler in UpdateOfferedCar()");
       }
 
       public Result<Car> RemoveOfferedCar(User user, Car car) {
          _log.LogDebug($"{nameof(RemoveOfferedCar)} {user.UserName} {car.Make}");
 
-         // Remove the car as offered cars
-         user.RemoveOfferedCar(car);
-
-         // Transfer to database
-         var result = _unitOfWork.SaveChanges();
-         _unitOfWork.Dispose();
-         
-         if(result) return new Success<Car>(car); 
-         else       return new Error<Car>($"Fehler in RemoveCar()");
+        return new Error<Car>($"Fehler in RemoveCar()");
       }
       #endregion
    }

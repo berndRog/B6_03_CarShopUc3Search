@@ -30,7 +30,7 @@ namespace CarShop.Persistence {
       #region methods IRepositoryUser
       public User? FindById(int id) 
          => _dbContext.Users  
-                      .Include(u => u.Address)
+                      .Include(u => u.Address)      // using Microsoft.EntityFrameworkCore
                       .Include(u => u.OfferedCars)  
                       .FirstOrDefault( u => u.Id == id);
                
@@ -59,12 +59,12 @@ namespace CarShop.Persistence {
          => _dbContext.Users.Update(user);     
 
       public void Delete(User user) {
-         // Set UserId in cars to 
-         foreach(var c in user.OfferedCars) {
-            c.User   = null;
-         // c.UserId = 0;
-            _dbContext.Cars.Remove(c);  
-         }
+         //// Set UserId in cars to 
+         //foreach(var c in user.OfferedCars) {
+         //   c.User   = null;
+         //// c.UserId = 0;
+         //   _dbContext.Cars.Remove(c);  
+         //}
          if(user.Address == null )  
             _dbContext.Users.Remove(user);
          else {

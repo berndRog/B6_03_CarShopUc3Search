@@ -12,6 +12,10 @@ namespace CarShop {
       IEnumerable<Car> Select(Func<Car, bool> predicate);
       IEnumerable<Car> SelectAll(); 
 
+//    void Insert(Car car);
+//    void Update(Car car);
+      void Delete(Car car);
+
       void Attach(Car car);
 
       int Count();

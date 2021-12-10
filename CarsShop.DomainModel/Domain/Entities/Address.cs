@@ -1,6 +1,6 @@
 ﻿namespace CarShop.Domain.Entities {
    
-   public record Address:  IEntity {
+   public class Address:  IEntity {
 
       public int    Id       { get; set; } = 0;
       public string StreetNr { get; set; } = string.Empty;

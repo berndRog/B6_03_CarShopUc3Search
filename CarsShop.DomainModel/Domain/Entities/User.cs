@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CarShop.Domain.Entities {
 
-   public record User:  IEntity {
+   public class User:  IEntity {
 
       #region properties
       public int     Id       { get; set; } 
@@ -51,7 +51,9 @@ namespace CarShop.Domain.Entities {
          return text;
       }
 
-      public bool IsEqual(User user) {
+      public bool IsEqual(User? user) {
+         if( user == null) return false;
+         
          // Check properties
          var result = Id       == user.Id       &&
                       Name     == user.Name     &&
@@ -63,15 +65,13 @@ namespace CarShop.Domain.Entities {
          // some properties are not equal
          if(result == false) return false;
    
-         // Check Address
+         // Check Addresses
          // both Addresses are nul -> no check necessary
-         if(Address == null && user.Address == null) 
-            result = result && true;
-         else if(Address == null && user.Address == null )
-            result = result && Address!.IsEqual(user.Address!);
+         if     (Address == null && user.Address == null) result &= true;
+         else if(Address != null && user.Address != null) result &= Address.IsEqual(user.Address);
          // one Address null and the other is not
-         else if(Address != null && user.Address == null || Address == null && user.Address != null) 
-             result = result && false; 
+         else if(Address != null && user.Address == null ||
+                 Address == null && user.Address != null) result &= false;
          if(result == false) return false;
 
          // Check Cars
@@ -80,11 +80,11 @@ namespace CarShop.Domain.Entities {
       }
 
       private bool CompareOfferedCars(User user) {
-         // if the number of cars in the list isn't equal -> error
+         // if the number of cars isn't equal -> false
          if(user.OfferedCars.Count != OfferedCars.Count) return false;
          var found = 0;
-         foreach(Car car in user.OfferedCars) {
-            foreach(var c in OfferedCars) {
+         foreach(Car car in user.OfferedCars) { // offerdCars in parameter
+            foreach(var c in OfferedCars) {     // are compared with offeredCars in this object
                if(c.IsEqual(car)) {
                   found++;
                   break;

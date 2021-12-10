@@ -54,7 +54,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddress_FindUt() {
@@ -64,7 +64,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.Find(u => u.UserName =="MartinM");
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddress_SelectUt() {
@@ -77,7 +77,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          Assert.AreEqual(1, actualUsers.Count());
          var listOfUsers = actualUsers.ToList();
-         Assert.IsTrue(user.IsEqual(listOfUsers[0]));
+         Assert.IsTrue(listOfUsers[0]?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddress_SelectAllUt() {
@@ -90,7 +90,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          Assert.AreEqual(1, actualUsers.Count());
          var listOfUsers = actualUsers.ToList();
-         Assert.IsTrue(user.IsEqual(listOfUsers[0]));
+         Assert.IsTrue(listOfUsers[0]?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddress_InsertUt() {
@@ -102,8 +102,8 @@ namespace CarShop.Persistence.Ut {
          _unitOfWork.Dispose();
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
-         _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         _unitOfWork.Dispose();         
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddress_UpdateUt() {
@@ -118,7 +118,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithoutAddressDeleteUt() {
@@ -144,7 +144,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithtAddress_FindUt() {
@@ -154,7 +154,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.Find(u => u.UserName =="MartinM");
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithAddress_SelectUt() {
@@ -167,7 +167,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          Assert.AreEqual(1, actualUsers.Count());
          var listOfUsers = actualUsers.ToList();
-         Assert.IsTrue(user.IsEqual(listOfUsers[0]));
+         Assert.IsTrue(listOfUsers[0]?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithAddress_SelectAllUt() {
@@ -180,7 +180,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          Assert.AreEqual(1, actualUsers.Count());
          var listOfUsers = actualUsers.ToList();
-         Assert.IsTrue(user.IsEqual(listOfUsers[0]));
+         Assert.IsTrue(listOfUsers[0]?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithAddress_InsertUt() {
@@ -197,7 +197,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithAddress_UpdateUt() {
@@ -212,7 +212,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWithAddress_DeleteUt() {
@@ -239,7 +239,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.FindById(_seed.User02.Id);
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(_seed.User02.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(_seed.User02));
       }
       [TestMethod]
       public void SixUsers_FindUt() {
@@ -249,7 +249,7 @@ namespace CarShop.Persistence.Ut {
          var actual = _unitOfWork.RepositoryUser.Find(user => user.UserName =="BBauer");
          _unitOfWork.Dispose();
          // Assert
-         Assert.IsTrue(_seed.User02.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(_seed.User02));
       }
       [TestMethod]
       public void SixUsers_SelectUt() {
@@ -263,8 +263,8 @@ namespace CarShop.Persistence.Ut {
          Assert.AreEqual(2, actualUsers.Count());
          var user3 = actualUsers.FirstOrDefault(u => u.Id == _seed.User03.Id);
          var user6 = actualUsers.FirstOrDefault(u => u.Id == _seed.User06.Id);
-         Assert.IsTrue(_seed.User03.IsEqual(user3));
-         Assert.IsTrue(_seed.User06.IsEqual(user6));
+         Assert.IsTrue(user3?.IsEqual(_seed.User03));
+         Assert.IsTrue(user6?.IsEqual(_seed.User06));
       }
       [TestMethod]
       public void SixUsers_SelectAllUt() {
@@ -349,7 +349,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryCar.FindById(id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(_seed.Car01.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(_seed.Car01));
       }
       [TestMethod]
       public void UserWithCar_UpdateCarUt() {
@@ -371,7 +371,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryCar.FindById(carId);
          _unitOfWork.Dispose();
-         Assert.IsTrue(car.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(car));
       }
       [TestMethod]
       public void UserWithCar_DeleteCarUt() {
@@ -412,7 +412,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWith3Cars_UpdateUt() {
@@ -434,7 +434,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void UserWith3Cars_DeleteUt() {
@@ -475,7 +475,7 @@ namespace CarShop.Persistence.Ut {
          // Assert
          var actual = _unitOfWork.RepositoryUser.FindById(user.Id);
          _unitOfWork.Dispose();
-         Assert.IsTrue(user.IsEqual(actual));
+         Assert.IsTrue(actual?.IsEqual(user));
       }
       [TestMethod]
       public void DeleteUserWithAddressWith3CarUt() {
